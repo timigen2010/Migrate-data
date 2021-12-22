@@ -47,7 +47,8 @@ class MigrateCustomers implements MigrateCustomersInterface
 
             if($validator->fails()){
 
-                $errors []= ['error' => $validator->errors()->keys()[0], 'original' => $row['original']];
+                $errors []= ['error' => $validator->errors()->keys()[0],
+                    'original' => preg_replace('/[\x00-\x1F\x7F]/u', '', $row['original'])];
 
             } else {
 
