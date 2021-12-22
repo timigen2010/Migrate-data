@@ -56,6 +56,7 @@ class MigrateData extends Command
     public function handle()
     {
         $this->cleanCustomersService->clean();
+        $this->info("Customers table has been cleaned successfully.");
 
         try{
             $errors = $this->migrateCustomersService->migrate($this->argument('filename'), $this->option('first-row-header'));
@@ -64,8 +65,13 @@ class MigrateData extends Command
             return 1;
         }
 
-        $this->info("Uninserted rows are provided in the table below.");
-        $this->table(['error', 'original'], $errors);
+        if($errors){
+            $this->info("Valid data has been inserted successfully.");
+            $this->info("Uninserted rows are provided in the table below.");
+            $this->table(['error', 'original'], $errors);
+        } else {
+            $this->info("All data has been inserted successfully.");
+        }
 
         return 0;
     }
